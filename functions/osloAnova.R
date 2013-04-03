@@ -8,10 +8,12 @@
 osloAnovaAnalysis <- function(){
   ## REQUIRE
   require(synapseClient)
+  require(survcomp)
   
   ## LOAD NECESSARY DATA OBJECTS
   osloPredEnt <- loadEntity('syn1725898')
   osloScores <- osloPredEnt$objects$osloPredictions
+  N <- ncol(osloScores)
   clinEnt <- loadEntity('syn1449480')
   clinicData <- clinEnt$objects$xIntClinDat
   survEnt <- loadEntity('syn1449477')
@@ -70,8 +72,44 @@ osloAnovaAnalysis <- function(){
   diHer2[her2 == 'GAIN'] <- 'pos'
   diHer2[her2 != 'GAIN'] <- 'neg'
   
-  
-  
+  ## AGE ANOVA
+  y <- array(0, c(2*N, 1))
+  x <- factor(c(array(0, c(N, 1)), array(1, c(N, 1))), labels = c(0,1))            
+  for (i in 1:N) {
+    iCciResultA <- concordance.index(osloScores[age == 0, i], clinicalSurvData[age == 0, 1], clinicalSurvData[age == 0, 2])
+    y[i] <- iCciResultA$c.index
+    iCciResultB <- concordance.index(osloScores[age == 1, i], clinicalSurvData[age == 1, 1], clinicalSurvData[age == 1, 2])
+    y[N+i] <- iCciResultB$c.index
+  }
+  a <- anova(lm(y ~ x))
+  age_pvar <- 100 * a[1,2] / sum(a[,2])
+  message("% variance age: ", age_pvar)
+  message("p-value: ", a[1,5])
   
 
+
 }
+
+
+
+#########
+# varLevels <- levels(age)
+# nVarLevels <- length(levels(age))
+# yMat <- matrix(data = NA, nrow = , ncol = nVarLevels)
+# 
+# y1 <- rep(NA, ncol(osloScores))
+# y2 <- rep(NA, ncol(osloScores))
+# x <- as.factor(c(rep(0, ncol(osloScores)), rep(1, ncol(osloScores))))
+# 
+# varANOVA <- function(clinicalVec){
+#   varLevels <- levels(clinicalVec)
+#   foo <- lapply(varLevels, function(varLevel){
+#     cciResult <- concordance.index(osloScores[clinicalVec == 0, ])
+#   })
+# }
+
+foo <- apply(osloScores, 2, function(x){
+  
+})
+
+
