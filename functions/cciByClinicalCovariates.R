@@ -142,20 +142,50 @@ cciBoxPlots <- function(returnObj){
   makeBoxPlot <- function(clinDF){
     boxPlot <- ggplot(clinDF, aes(factor(clinical), cci)) +
       geom_boxplot() +
-      geom_jitter(aes(colour = factor(clinical)), size = 5)
+      geom_jitter(aes(colour = factor(clinical)), size = 5) +
+      theme(legend.position = 'none')
   }
   
   ## FIRST BOXPLOT: BY GRADE
   gradeDF <- mCciDF[grep('grade', mCciDF$clinical), ]
-  gradeBoxPlot <- ggplot(gradeDF, aes(factor(clinical), cci)) + 
-    geom_boxplot() +
-    geom_jitter(aes(colour = factor(clinical)), size = 5) +
+  gradeBoxPlot <- makeBoxPlot(gradeDF) +
     ggtitle('Model Performance & Histological Grade\n') +
     xlab('\nGrade') + ylab('Concordance Index\n')
   
   ## SECOND BOXPLOT: BY LYMPH NODE CATEGORY
   lymphNodeDF <- mCciDF[grep('ln', mCciDF$clinical), ]
-  lymphNodeBoxPlot <- ggplot(lymphNodeDF, aes(factor))
+  lymphNodeBoxPlot <- makeBoxPlot(lymphNodeDF) +
+    ggtitle('Model Performance & LN Status\n') +
+    scale_x_discrete(name = '\nLymph Node Status',
+                     breaks = colnames(cciDF)[4:7],
+                     labels = c('LN Neg', 'LN 1-3', 'LN 4-9', 'LN 10+'))
+  
+  ## THIRD BOXPLOT: BY FOLLOWUP TIME
+  timeDF <- mCciDF[grep('time', mCciDF$clinical), ]
+  timeBoxPlot <- makeBoxPlot(timeDF) +
+    ggtitle('Model Performance & Followup Time\n') +
+    scale_x_discrete(name = '\nFollowup Time',
+                     breaks = colnames(cciDF)[8:10],
+                     labels = c('0-5 Years', '5-10 Years', '10+ Years'))
+  
+  ## FOURTH BOXPLOT: OTHER VARIABLES
+  ageDF <- mCciDF[grep('Meno', mCciDF$clinical), ]
+  erDF <- mCciDF[grep('^er', mCciDF$clinical), ]
+  her2DF <- mCciDF[grep('her2', mCciDF$clinical), ]
+  clinDF <- rbind(ageDF, erDF, her2DF)
+  clinBoxPlot <- makeBoxPlot(clinDF) +
+    ggtitle('Model Performance & Clinical Characteristics') +
+    scale_x_discrete(name = '\nClinical Characteristics',
+                     breaks = colnames(cciDF)[11:16],
+                     labels = c('≤50Yr', '>50Yr', 'ER+', 'ER-', 'HER2+', 'HER2-'))
+  
+  returnObj <- list('cciDF' = mCciDF,
+                    'gradeBoxPlot' = gradeBoxPlot,
+                    'lymphNodeBoxPlot' = lymphNodeBoxPlot,
+                    'timeBoxPlot' = timeBoxPlot,
+                    'clincalBoxPlot' = clinBoxPlot)
+  
+  return(returnObj)
 }
 
 
