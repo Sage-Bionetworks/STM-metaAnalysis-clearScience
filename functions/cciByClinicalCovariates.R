@@ -32,7 +32,7 @@ cciBoxPlotDataPrep <- function(){
 
   ## IDENTIFY CLINICAL SUBCATEGORIES
   osloPredMat <- osloVecEnt$objects$osloPredictions
-  clinLogicalMat <- as.data.frame(matrix(0, nrow = nrow(osloPredMat), ncol = 18))
+  clinLogicalMat <- as.data.frame(matrix(0, nrow = nrow(osloPredMat), ncol = 20))
   rownames(clinLogicalMat) <- rownames(osloPredMat)
   colnames(clinLogicalMat) <- c('grade1', 
                                 'grade2', 
@@ -50,6 +50,8 @@ cciBoxPlotDataPrep <- function(){
                                 'size2plus',
                                 'erPos',
                                 'erNeg',
+                                'prPos',
+                                'prNeg',
                                 'her2Pos',
                                 'her2Neg')
   
@@ -106,6 +108,12 @@ cciBoxPlotDataPrep <- function(){
   
   erNegSamps <- xIntClinDat[which(xIntClinDat$ER.Expr == '-'), 1]
   clinLogicalMat[erNegSamps, 'erNeg'] <- 1
+  
+  prPosSamps <- xIntClinDat[which(xIntClinDat$PR.Expr == '+'), 1]
+  clinLogicalMat[prPosSamps, 'prPos'] <- 1
+  
+  prNegSamps <- xIntClinDat[which(xIntClinDat$PR.Expr == '-'), 1]
+  clinLogicalMat[prNegSamps, 'prNeg'] <- 1
   
   her2PosSamps <- xIntClinDat[which(xIntClinDat$HER2_SNP6_state == 'GAIN'), 1]
   clinLogicalMat[her2PosSamps, 'her2Pos'] <- 1

@@ -9,107 +9,120 @@ osloAnovaAnalysis <- function(){
   ## REQUIRE
   require(synapseClient)
   require(survcomp)
+  require(reshape)
+  require(ggplot2)
   
   ## LOAD NECESSARY DATA OBJECTS
-  osloPredEnt <- loadEntity('syn1725898')
-  osloScores <- osloPredEnt$objects$osloPredictions
-  N <- ncol(osloScores)
-  clinEnt <- loadEntity('syn1449480')
-  clinicData <- clinEnt$objects$xIntClinDat
-  survEnt <- loadEntity('syn1449477')
-  clinicalSurvData <- survEnt$objects$xIntSurvObj
+  clinGroupCciEnt <- loadEntity('syn1738278')
+  clinGroupCciList <- clinGroupCciEnt$objects$object
   
-  ## OBTAIN VECTORS FOR EACH CLINICAL CHARACTERISTIC
-  age <- clinicData[ ,'age_at_diagnosis']
-  lymphnodes <- clinicData[ ,'lymph_nodes_positive']
-  grade <- as.factor(clinicData[ ,'grade'])
-  tumorsize <- clinicData[ ,'size']
-  her2 <- as.factor(clinicData[ ,'HER2_SNP6_state'])
-  er <- as.factor(clinicData[ ,'ER.Expr'])
-  pr <- as.factor(clinicData[ ,'PR.Expr'])
-  os <- clinicalSurvData[ , 1]
-  ev <- clinicalSurvData[ , 2]
-  
-  ## DISCRETIZE CLINICAL CHARACTERISTICS
-  ## lymph node status
-  for (i in 1:length(lymphnodes)) {
-    if (is.na(lymphnodes[i])) {}
-    else if (lymphnodes[i] >=1 & lymphnodes[i] <=3) {
-      lymphnodes[i] <- 1
-    }
-    else if (lymphnodes[i] >= 4 & lymphnodes[i] <= 9) {
-      lymphnodes[i] <- 2
-    } 
-    else if (lymphnodes[i] > 9) {
-      lymphnodes[i] <- 3
-    }
-  }
-  lymphnodes <- as.factor(lymphnodes)
-  
-  ## age
-  age <- as.factor(ifelse(age <= 50, 0, 1))
-  
-  ## size
-  tumorsize <- as.factor(ifelse(tumorsize <= 2, 0, 1))
-  
-  ## followup time
-  for (i in 1:length(os)) {
-    if (is.na(os[i])) {}
-    else if (os[i] <= 1825 & ev[i] == 1) {
-      os[i] <- 0
-    }
-    else if (os[i] > 1825 & os[i] <= 3650 & ev[i] == 1) {
-      os[i] <- 1
-    } 
-    else if (os[i] > 3650) {
-      os[i] <- 2
-    }
-  }
-  os <- as.factor(os)
-  
-  ## HER2 status
-  diHer2 <- rep(NA, length(her2))
-  diHer2[her2 == 'GAIN'] <- 'pos'
-  diHer2[her2 != 'GAIN'] <- 'neg'
-  
-  ## AGE ANOVA
-  y <- array(0, c(2*N, 1))
-  x <- factor(c(array(0, c(N, 1)), array(1, c(N, 1))), labels = c(0,1))            
-  for (i in 1:N) {
-    iCciResultA <- concordance.index(osloScores[age == 0, i], clinicalSurvData[age == 0, 1], clinicalSurvData[age == 0, 2])
-    y[i] <- iCciResultA$c.index
-    iCciResultB <- concordance.index(osloScores[age == 1, i], clinicalSurvData[age == 1, 1], clinicalSurvData[age == 1, 2])
-    y[N+i] <- iCciResultB$c.index
-  }
+  ## AGE ONE WAY ANOVA
+  y <- c(as.vector(clinGroupCciList$preMeno), as.vector(clinGroupCciList$postMeno))
+  x <- as.factor(c(rep(0, 83), rep(1, 83)))
   a <- anova(lm(y ~ x))
   age_pvar <- 100 * a[1,2] / sum(a[,2])
-  message("% variance age: ", age_pvar)
+  message("% variance AGE: ", age_pvar)
   message("p-value: ", a[1,5])
   
-
-
-}
-
-
-
-#########
-# varLevels <- levels(age)
-# nVarLevels <- length(levels(age))
-# yMat <- matrix(data = NA, nrow = , ncol = nVarLevels)
-# 
-# y1 <- rep(NA, ncol(osloScores))
-# y2 <- rep(NA, ncol(osloScores))
-# x <- as.factor(c(rep(0, ncol(osloScores)), rep(1, ncol(osloScores))))
-# 
-# varANOVA <- function(clinicalVec){
-#   varLevels <- levels(clinicalVec)
-#   foo <- lapply(varLevels, function(varLevel){
-#     cciResult <- concordance.index(osloScores[clinicalVec == 0, ])
-#   })
-# }
-
-foo <- apply(osloScores, 2, function(x){
+  ## LYMPH NODE STATUS ONE WAY ANOVA
+  y <- c(as.vector(clinGroupCciList$lnNeg),
+         as.vector(clinGroupCciList$ln1to3),
+         as.vector(clinGroupCciList$ln4to9),
+         as.vector(clinGroupCciList$ln10plus))
   
-})
+  x <- as.factor(c(rep(0, 83),
+                   rep(1, 83),
+                   rep(2, 83),
+                   rep(3, 83)))
+  
+  a <- anova(lm(y ~ x))
+  lymphNode_pvar <- 100 * a[1,2] / sum(a[,2])
+  message("% variance LYMPH NODE STATUS: ", lymphNode_pvar)
+  message("p-value: ", a[1,5])
 
-
+  ## HISTOLOGIC GRADE ONE WAY ANOVA
+  y <- c(as.vector(clinGroupCciList$grade1),
+         as.vector(clinGroupCciList$grade2),
+         as.vector(clinGroupCciList$grade3))
+  
+  x <- as.factor(c(rep(0, 83),
+                   rep(1, 83),
+                   rep(2, 83)))
+  
+  a <- anova(lm(y ~ x))
+  grade_pvar <- 100 * a[1,2] / sum(a[,2])
+  message("% variance HISTOLOGIC GRADE: ", grade_pvar)
+  message("p-value: ", a[1,5])
+  
+  ## TUMOR SIZE ONE WAY ANOVA
+  y <- c(as.vector(clinGroupCciList$size0to2),
+         as.vector(clinGroupCciList$size2plus))
+  
+  x <- as.factor(c(rep(0, 83),
+                   rep(1, 83)))
+  
+  a <- anova(lm(y ~ x))
+  size_pvar <- 100 * a[1,2] / sum(a[,2])
+  message("% variance TUMOR SIZE: ", size_pvar)
+  message("p-value: ", a[1,5])
+  
+  ## FOLLOWUP TIME ONE WAY ANOVA
+  y <- c(as.vector(clinGroupCciList$time0to5),
+         as.vector(clinGroupCciList$time5to10),
+         as.vector(clinGroupCciList$time10plus))
+  
+  x <- as.factor(c(rep(0, 83),
+                   rep(1, 83),
+                   rep(2, 83)))
+  
+  a <- anova(lm(y ~ x))
+  time_pvar <- 100 * a[1,2] / sum(a[,2])
+  message("% variance FOLLOWUP TIME: ", time_pvar)
+  message("p-value: ", a[1,5])
+  
+  ## HER2 STATUS ONE WAY ANOVA
+  y <- c(as.vector(clinGroupCciList$her2Pos),
+         as.vector(clinGroupCciList$her2Neg))
+  
+  x <- as.factor(c(rep(0, 83),
+                   rep(1, 83)))
+  
+  a <- anova(lm(y ~ x))
+  her2_pvar <- 100 * a[1,2] / sum(a[,2])
+  message("% variance HER2 STATUS: ", her2_pvar)
+  message("p-value: ", a[1,5])
+  
+  ## ER STATUS ONE WAY ANOVA
+  y <- c(as.vector(clinGroupCciList$erPos),
+         as.vector(clinGroupCciList$erNeg))
+  
+  x <- as.factor(c(rep(0, 83),
+                   rep(1, 83)))
+  
+  a <- anova(lm(y ~ x))
+  er_pvar <- 100 * a[1,2] / sum(a[,2])
+  message("% variance ER STATUS: ", er_pvar)
+  message("p-value: ", a[1,5])
+  
+  ## PR STATUS ONE WAY ANOVA
+  y <- c(as.vector(clinGroupCciList$prPos),
+         as.vector(clinGroupCciList$prNeg))
+  
+  x <- as.factor(c(rep(0, 83),
+                   rep(1, 83)))
+  
+  a <- anova(lm(y ~ x))
+  pr_pvar <- 100 * a[1,2] / sum(a[,2])
+  message("% variance PR STATUS: ", pr_pvar)
+  message("p-value: ", a[1,5])
+  
+  ## PLOT THE PERCENT VARIANCE EXPLAINED
+  anovaDF <- data.frame('Grade' = grade_pvar, 'LN' = lymphNode_pvar, 'FollowupTime' = time_pvar, 'Age' = age_pvar, 'Size' = size_pvar,
+                        'PR' = pr_pvar, 'ER' = er_pvar, 'HER2' = her2_pvar)
+  mAnovaDF <- melt(anovaDF)
+  colnames(mAnovaDF) <- c('Clinical', 'percentVariance')
+  
+  anovaBarPlot <- ggplot(mAnovaDF, aes(Clinical, percentVariance)) + geom_bar(aes(fill = Clinical)) +
+    ggtitle('ANOVA Analysis of Clinical Characteristics\n') +
+    xlab('\nClinical Characteristic') + ylab('Percent Variance Explained\n')
+  
