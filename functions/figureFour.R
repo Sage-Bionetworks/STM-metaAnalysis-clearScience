@@ -14,8 +14,9 @@ figureFour <- function(){
   require(reshape)
   require(gtools)
   
-  
-  
+  ## LOAD NECESSARY DATA OBJECTS
+  metbEnt <- loadEntity('syn1738796')
+  osloEnt <- loadEntity('syn1725898')
   
   
   
