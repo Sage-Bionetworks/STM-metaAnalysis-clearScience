@@ -32,6 +32,16 @@ shinyUI(pageWithSidebar(
                             'Tumor Size 0-2 CM',
                             'Tumor Size 2+ CM'
                             )),
+    helpText("Select a Clinical Covariate",
+             "then click 'Update View'",
+             "this will re-sort the leaderboard by",
+             "performance in that clinical subgrouping",
+             "and display a boxplot of model performance",
+             "within that subgroup versus All Patients",
+             "in real time."),
+    
+    submitButton("Update View")
+    
     plotOutput("graphics1", width = '100%'),
     plotOutput('graphics2'),
     plotOutput('graphics3')

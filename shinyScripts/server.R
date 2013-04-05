@@ -18,8 +18,38 @@ oslovalLB <- oslovalLbEnt$objects$object
 rownames(oslovalLB) <- oslovalLB$SYNID
 cciGroupList <- cciEnt$objects$object
 
-## SHINY SERVER LOGIC
+# pre-sort (descending) the cciGroup vectors
+sGroupList <- lapply(cciGroupList, sort, decreasing = TRUE)
+
+## SHINY SERVER LOGIC ########################################################
 shinyServer(function(input, output) {
+  
+  # Return the requested clinical subgroup
+  datasetInput <- reactive(function() {
+    switch(input$clinCovar,
+           "All Patients" = oslovalLB,
+           "ER Positive" = oslovalLB[names(sGroupList$erPos), ],
+           "ER Negative" = oslovalLB[names(sGroupList$erNeg), ],
+           'HER2 Positive' = oslovalLB[names(sGroupList$her2Pos), ],
+           'HER2 Negative' = oslovalLB[names(sGroupList$her2Neg), ],
+           'PR Positive' = oslovalLB[names(sGroupList$prPos), ],
+           'PR Negative' = oslovalLB[names(sGroupList$prNeg), ],
+           'Histologic Grade 1' = oslovalLB[names(sGroupList$grade1), ],
+           'Histologic Grade 2' = oslovalLB[names(sGroupList$grade2), ],
+           'Histologic Grade 3' = oslovalLB[names(sGroupList$grade3), ],
+           'Lymph Node Negative' = oslovalLB[names(sGroupList$lnNeg), ],
+           'Lymph Node 1-3', = 
+           'Lymph Node 4-9',
+           'Lymph Node 10+',
+           'Followup Time 0-5 Years',
+           'Followup Time 5-10 Years',
+           'Followup Time 10+ Years',
+           'Age ≤ 50 Years',
+           'Age 50+ Years',
+           'Tumor Size 0-2 CM',
+           'Tumor Size 2+ CM'
+           )
+  })
   
   # Show the first "n" observations
   output$view <- renderTable({
