@@ -40,16 +40,15 @@ shinyUI(pageWithSidebar(
              "within that subgroup versus All Patients",
              "in real time."),
     
-    submitButton("Update View")
+    submitButton("Update View"),
     
-    plotOutput("graphics1", width = '100%'),
-    plotOutput('graphics2'),
-    plotOutput('graphics3')
+    h4('Clinical Subgroup Boxplot'),
+    plotOutput("graphics1", width = '100%')
   ),
   
   # Show a summary of the dataset and an HTML table with the requested
   # number of observations
   mainPanel(
-    tableOutput("view")
+    tableOutput("tableView")
   )
 ))

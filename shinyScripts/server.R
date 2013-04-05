@@ -21,10 +21,14 @@ cciGroupList <- cciEnt$objects$object
 # pre-sort (descending) the cciGroup vectors
 sGroupList <- lapply(cciGroupList, sort, decreasing = TRUE)
 
+# set up a dataframe for boxplots
+boxplotDF <- data.frame('category' = rep('allPatients', nrow(oslovalLB)), 
+                        'scores' = oslovalLB$CCI)
+
 ## SHINY SERVER LOGIC ########################################################
 shinyServer(function(input, output) {
   
-  # Return the requested clinical subgroup
+  # User inputs the requested clinical subgroup
   datasetInput <- reactive(function() {
     switch(input$clinCovar,
            "All Patients" = oslovalLB,
@@ -38,40 +42,35 @@ shinyServer(function(input, output) {
            'Histologic Grade 2' = oslovalLB[names(sGroupList$grade2), ],
            'Histologic Grade 3' = oslovalLB[names(sGroupList$grade3), ],
            'Lymph Node Negative' = oslovalLB[names(sGroupList$lnNeg), ],
-           'Lymph Node 1-3', = 
-           'Lymph Node 4-9',
-           'Lymph Node 10+',
-           'Followup Time 0-5 Years',
-           'Followup Time 5-10 Years',
-           'Followup Time 10+ Years',
-           'Age ≤ 50 Years',
-           'Age 50+ Years',
-           'Tumor Size 0-2 CM',
-           'Tumor Size 2+ CM'
+           'Lymph Node 1-3' = oslovalLB[names(sGroupList$ln1to3), ],
+           'Lymph Node 4-9' = oslovalLB[names(sGroupList$ln4to9), ],
+           'Lymph Node 10+' = oslovalLB[names(sGroupList$ln10plus), ],
+           'Followup Time 0-5 Years' = oslovalLB[names(sGroupList$time0to5), ],
+           'Followup Time 5-10 Years' = oslovalLB[names(sGroupList$time5to10), ],
+           'Followup Time 10+ Years' = oslovalLB[names(sGroupList$time10plus), ],
+           'Age ≤ 50 Years' = oslovalLB[names(sGroupList$preMeno), ],
+           'Age 50+ Years' = oslovalLB[names(sGroupList$postMeno), ],
+           'Tumor Size 0-2 CM' = oslovalLB[names(sGroupList$size0to2), ],
+           'Tumor Size 2+ CM' = oslovalLB[names(sGroupList$size2plus), ]
            )
   })
   
-  # Show the first "n" observations
-  output$view <- renderTable({
-    head(sortedLeaderboard, n = input$obs)
+  # Server outputs
+  lbTable <- datasetInput()
+  
+  output$tableView <- renderTable({
+    lbTable
   })
+  
   output$graphics1 <- renderPlot({
-    lbHist <- ggplot(sortedLeaderboard[1:input$obs, ], aes(x = score)) + geom_histogram(alpha = 0.3) +
-      ggtitle('Histogram of Windowed Submission Scores')
-    show(lbHist)
-  })
-  output$graphics2 <- renderPlot({
-    lbBoxplot <- ggplot(sortedLeaderboard[1:input$obs, ], aes(x = factor(round), y = score)) + 
+    subgroupDF <- data.frame('category' = rep('clinicalSubgroup', 83), 
+                             'scores' = lbTable$CCI)
+    boxplotDF <- rbind(boxplotDF, subgroupDF)
+    lbBoxplot <- ggplot(boxplotDF, aes(x = factor(category), y = scores)) + 
       geom_boxplot() + 
-      geom_jitter(aes(colour = factor(round)), size = 4) +
-      ggtitle('Boxplot of Windowed Submission Scores')
+      geom_jitter(aes(colour = factor(category)), size = 4) +
+      ggtitle('Boxplot of Model Scores by Clinical Subgroup versus All Patients')
     show(lbBoxplot)
-  })
-  output$graphics3 <- renderPlot({
-    lbDensplot <- ggplot(sortedLeaderboard[1:input$obs, ], aes(score, fill = factor(round))) + 
-      geom_density(alpha = 0.3) + 
-      ggtitle('Density Plot of Windowed Submission Scores')
-    show(lbDensplot)
   })
   
 })
