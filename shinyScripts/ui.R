@@ -43,7 +43,7 @@ shinyUI(pageWithSidebar(
     submitButton("Update View"),
     
     h4('Clinical Subgroup Boxplot'),
-    plotOutput("graphics1", width = '100%')
+    plotOutput("graphics1", width = '100%', height = '500px')
   ),
   
   # Show a summary of the dataset and an HTML table with the requested
