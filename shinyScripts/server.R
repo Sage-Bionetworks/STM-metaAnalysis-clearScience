@@ -67,7 +67,7 @@ shinyServer(function(input, output) {
   
   # Server outputs
   output$tableView <- renderTable({
-    datasetInput()
+    datasetInput()[ , 1:4]
   })
   
   output$graphics1 <- renderPlot({
@@ -82,7 +82,8 @@ shinyServer(function(input, output) {
       geom_boxplot() + 
       geom_jitter(aes(colour = factor(category)), size = 4) +
       ggtitle('All Patients versus Selected Subgroup\n') +
-      ylab('Concordance Index\n') + xlab('\nCategory')
+      ylab('Concordance Index\n') + xlab('\nCategory') +
+      theme(legend.position = 'none')
     show(lbBoxplot)
   })
   
