@@ -100,7 +100,7 @@ shinyServer(function(input, output) {
     lbBoxplot <- ggplot(boxplotDF, aes(x = factor(category), y = scores)) + 
       geom_boxplot() + 
       geom_jitter(aes(colour = factor(category)), size = 4) +
-      ggtitle('All Patients versus Clinical Subgroup\n') +
+      ggtitle('All Patients versus Selected Subgroup\n') +
       ylab('Concordance Index\n') + xlab('\nCategory')
     show(lbBoxplot)
   })
