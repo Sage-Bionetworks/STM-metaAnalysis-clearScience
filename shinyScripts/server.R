@@ -87,4 +87,29 @@ shinyServer(function(input, output) {
     show(lbBoxplot)
   })
   
+  output$graphics2 <- renderPlot({
+    lbTable <- datasetInput()
+    subgroupDF <- data.frame('category' = rep('clinicalSubgroup', nrow(lbTable)), 
+                             'scores' = lbTable$CCI)
+    boxplotDF <- rbind(boxplotDF, subgroupDF)
+    
+    class(boxplotDF$scores) <- 'numeric'
+    
+    lbDenseplot <- ggplot(boxplotDF, aes(scores, fill = factor(category))) + 
+      geom_density(alpha = 0.3) +
+      ggtitle(paste('All Patients versus ', toupper(input$clinCovar), '\n', sep = '')) +
+      ylab('Concordance Index\n') + xlab('\nCategory') +
+      theme(legend.position = 'none')
+    show(lbDenseplot)
+  })
+  
 })
+
+# 
+# 
+# output$graphics3 <- renderPlot({
+#   lbDensplot <- ggplot(sortedLeaderboard[1:input$obs, ], aes(score, fill = factor(round))) + 
+#     geom_density(alpha = 0.3) + 
+#     ggtitle('Density Plot of Windowed Submission Scores\n')
+#   show(lbDensplot)
+# })
