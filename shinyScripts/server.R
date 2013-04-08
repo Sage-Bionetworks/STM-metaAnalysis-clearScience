@@ -80,8 +80,8 @@ shinyServer(function(input, output) {
     
     lbBoxplot <- ggplot(boxplotDF, aes(x = factor(category), y = scores)) + 
       geom_boxplot() + 
-      geom_jitter(aes(colour = factor(category)), size = 4) +
-      ggtitle(input$clinCovar) +
+      geom_jitter(aes(colour = factor(category)), size = 7, alpha = 0.7) +
+      ggtitle(paste('All Patients versus ', toupper(input$clinCovar), '\n', sep = '')) +
       ylab('Concordance Index\n') + xlab('\nCategory') +
       theme(legend.position = 'none')
     show(lbBoxplot)
