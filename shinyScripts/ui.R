@@ -1,4 +1,12 @@
-library(shiny)
+## ui.R
+
+## Erich S. Huang
+## Sage Bionetworks
+## Seattle, Washington
+## erich.huang@sagebase.org
+
+## REQUIRE
+require(shiny)
 
 # Define UI for dataset viewer application
 shinyUI(pageWithSidebar(
