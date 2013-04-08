@@ -54,8 +54,17 @@ shinyUI(pageWithSidebar(
   # Show a summary of the dataset and an HTML table with the requested
   # number of observations
   mainPanel(
-    h4('Clinical Subgroup Boxplot'),
+    h4('Clinical Subgroup Model Performance Boxplot'),
     plotOutput("graphics1", width = '85%', height = '500px'),
+    
+    h4('Clinical Subgroup Model Performance Density Plot'),
+    plotOutput("graphics2", width = '85%', height = '500px'),
+    
+#     helpText('Each point represents a model and its performance',
+#              'within the user-selected clinical subgroup of patients.',
+#              'On the left, in red, is a boxplot of model performance',
+#              'in ALL Patients, and on the right, in blue, is model',
+#              'performance within the specific clinical subgroup.'),
     
     h4('Leaderboard Top 10 By Covariate Selected'),
     tableOutput("tableView")
