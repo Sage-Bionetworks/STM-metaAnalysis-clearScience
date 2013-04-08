@@ -49,7 +49,7 @@ shinyUI(pageWithSidebar(
     h4('Clinical Subgroup Boxplot'),
     plotOutput("graphics1", width = '85%', height = '500px'),
     
-    h4('Final Leaderboard'),
+    h4('Leaderboard Top 10 By Covariate Selected'),
     tableOutput("tableView")
   )
 ))

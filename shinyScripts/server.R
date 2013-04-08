@@ -39,7 +39,7 @@ boxplotDF <- data.frame('category' = rep('allPatients', nrow(oslovalLB)),
 ## SHINY SERVER LOGIC ########################################################
 shinyServer(function(input, output) {
   
-  # User inputs the requested clinical subgroup
+  # User selects (inputs) the requested clinical subgroup
   datasetInput <- reactive({
     switch(input$clinCovar,
            "All Patients" = oslovalLB,
@@ -67,7 +67,7 @@ shinyServer(function(input, output) {
   
   # Server outputs
   output$tableView <- renderTable({
-    datasetInput()[ , 1:4]
+    datasetInput()[1:10, 1:4]
   })
   
   output$graphics1 <- renderPlot({
@@ -81,7 +81,7 @@ shinyServer(function(input, output) {
     lbBoxplot <- ggplot(boxplotDF, aes(x = factor(category), y = scores)) + 
       geom_boxplot() + 
       geom_jitter(aes(colour = factor(category)), size = 4) +
-      ggtitle('All Patients versus Selected Subgroup\n') +
+      ggtitle(input$clinCovar) +
       ylab('Concordance Index\n') + xlab('\nCategory') +
       theme(legend.position = 'none')
     show(lbBoxplot)
