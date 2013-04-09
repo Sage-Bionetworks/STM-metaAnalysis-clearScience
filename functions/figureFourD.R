@@ -64,7 +64,9 @@ figureFourD <- function(){
   oMetaBoxPlot <- ggplot(meltOMetaDF, aes(scoretype, metascore)) + geom_boxplot() +
     geom_jitter(aes(colour = factor(scoretype)), size = 4, alpha = 0.6) +
     theme(axis.text.y=element_text(size = 20)) +
-    theme(axis.text.x=element_text(size = 15))
+    theme(axis.text.x=element_text(size = 15)) +
+    ggtitle('OsloVal community scores by community size') +
+    ylab('Concordance Index') + xlab('Community Sizes')
   
   returnList <- list('osloCommunityBoxPlot' = oMetaBoxPlot,
                      'osloCommunityDataFrame' = meltOMetaDF)
