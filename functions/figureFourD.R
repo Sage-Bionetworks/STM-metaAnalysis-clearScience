@@ -27,11 +27,11 @@ figureFourD <- function(){
   
   osloSurv <- osloSurvEnt$objects$oslovalSurvData
   
-  osloLb <- osloLbEnt$objects$object
-  osloLb <- osloLb[1:83, ]
+  osloLeaderboard <- osloLbEnt$objects$object
+  osloLeaderboard <- osloLeaderboard[1:83, ]
   
   # Plots boxplots for metapredictions of 1,5,10,20,50 random participants
-  oMeta1Score <- osloLeaderboard[ , 'Concordance.Index']
+  oMeta1Score <- osloLeaderboard[ , 'CCI']
   oMeta5Score <- rep(0, 100)
   oMeta10Score <- rep(0, 100)
   oMeta20Score <- rep(0, 100)
