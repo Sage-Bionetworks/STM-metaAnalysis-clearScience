@@ -15,6 +15,9 @@ oslovalLbEnt <- loadEntity('syn1739275')
 cciEnt <- loadEntity('syn1738278')
 
 oslovalLB <- oslovalLbEnt$objects$object
+
+oslovalLB$MODEL <- strtrim(oslovalLB$MODEL, 30)
+
 rownames(oslovalLB) <- oslovalLB$SYNID
 cciGroupList <- cciEnt$objects$object
 
