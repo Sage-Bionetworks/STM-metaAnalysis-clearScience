@@ -4,7 +4,7 @@
 ## Sage Bionetworks
 ## erich.huang@sagebase.org
 
-figureTwoA <- function(){
+figureTwoA <- function(dateVec = NULL){
   
   ## REQUIRE
   require(synapseClient)
@@ -19,19 +19,21 @@ figureTwoA <- function(){
   metbLbEnt <- loadEntity('syn1745570') # Pre-15 October leaderboard
   preOctLeaderboard <- metbLbEnt$objects$object
   
-  cat('Querying Synapse for model "created on" dates\n')
   modelIDs <- preOctLeaderboard$SynapseID
-  dateVec <- mclapply(modelIDs, function(synId){
-    queryString <- sprintf("select createdOn from entity where entity.id == '%s'", synId)
-    queryResult <- synapseQuery(queryString)
-    createdOnA <- as.numeric(queryResult[1, 1])/1000
-    createdOnB <- as.POSIXct(createdOnA, origin = '1970-01-01')
-    modelDate <- unlist(strsplit(as.character(createdOnB), split = ' '))[1]
-  })
   
-  names(dateVec) <- modelIDs
-  dateFrame <- data.frame(t(data.frame(t(sapply(dateVec, c)))))
-  
+  if(is.null(dateVec)){
+    cat('Querying Synapse for model "created on" dates\n')
+    dateVec <- mclapply(modelIDs, function(synId){
+      queryString <- sprintf("select createdOn from entity where entity.id == '%s'", synId)
+      queryResult <- synapseQuery(queryString)
+      createdOnA <- as.numeric(queryResult[1, 1])/1000
+      createdOnB <- as.POSIXct(createdOnA, origin = '1970-01-01')
+      modelDate <- unlist(strsplit(as.character(createdOnB), split = ' '))[1]
+    })
+  } else {
+    names(dateVec) <- modelIDs
+    dateFrame <- data.frame(t(data.frame(t(sapply(dateVec, c)))))
+  }
   dateScoreFrame <- data.frame('score' = preOctLeaderboard$ConcordanceIndex, 'modelDate' = dateFrame)
   rownames(dateScoreFrame) <- modelIDs
   colnames(dateScoreFrame) <- c('score', 'modelDate')
@@ -88,7 +90,7 @@ figureTwoA <- function(){
   ## DEFINE A COLOR PALETTE FOR THIS FIGURE
   cat('Plotting the figure\n')
   cbbPalette <- c("#000000","#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55E00","#CC79A7")
-    
+  
   evolDF <- data.frame('modelID' = dateMaxScore$id,
                        'maxScores' = dateMaxScore$score, 
                        'dateLevels' = uniqueDates, 
@@ -130,11 +132,8 @@ figureTwoA <- function(){
     xlab('\nDate') + ylab('Max. CCI\n') +
     ggtitle('Evolution of Model Scores\n')
   
-  show(evolPlotDate)
-  
-  # plotEnt <- loadEntity('syn1688393')
-  # plotEnt <- addObject(plotEnt, evolPlotDate)  
-  # plotEnt <- storeEntity(plotEnt)  
+  returnList <- list('evolutionPlot' = evolPlotDate,
+                     'dateVector' = dateVec)
   
 }
 
