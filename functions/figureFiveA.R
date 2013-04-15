@@ -13,9 +13,11 @@ figureFiveA <- function(){
   require(ggplot2)
   
   ## LOAD NECESSARY DATA OBJECTS
+  cat('Loading necessary data objects from Synapse\n')
   clinGroupCciEnt <- loadEntity('syn1738278')
   clinGroupCciList <- clinGroupCciEnt$objects$object
   
+  cat('Performing one way ANOVA on clinical variables -> model performance\n')
   ## AGE ONE WAY ANOVA
   y <- c(as.vector(clinGroupCciList$preMeno), as.vector(clinGroupCciList$postMeno))
   x <- as.factor(c(rep(0, 83), rep(1, 83)))
@@ -117,6 +119,7 @@ figureFiveA <- function(){
   message("p-value: ", a[1,5])
   
   ## PLOT THE PERCENT VARIANCE EXPLAINED
+  cat('Plotting the Variance Explained barplot\n')
   anovaDF <- data.frame('Grade' = grade_pvar, 'LN' = lymphNode_pvar, 'FollowupTime' = time_pvar, 'Age' = age_pvar, 'Size' = size_pvar,
                         'PR' = pr_pvar, 'ER' = er_pvar, 'HER2' = her2_pvar)
   mAnovaDF <- melt(anovaDF)
@@ -128,7 +131,7 @@ figureFiveA <- function(){
   
   show(anovaBarPlot)
   
-  returnList<- list('anovaDF' = anovaDF,
+  returnList <- list('anovaDF' = anovaDF,
              'anovaBarPlot' = anovaBarPlot)
   
   return(returnList)

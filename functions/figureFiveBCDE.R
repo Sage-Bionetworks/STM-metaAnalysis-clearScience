@@ -1,4 +1,4 @@
-## cciByClinicalCovariates.R
+## figureFiveBCDE.R
 
 ## Erich S. Huang
 ## Sage Bionetworks
@@ -6,7 +6,7 @@
 
 
 ### FIRST FUNCTION
-cciBoxPlotDataPrep <- function(){
+figureFiveBCDE <- function(){
   ## REQUIRE
   require(synapseClient)
   require(ggplot2)
@@ -15,6 +15,7 @@ cciBoxPlotDataPrep <- function(){
   require(gtools)
   
   ## LOAD DATA OBJECTS
+  cat('Loading the necessary data objects from Synapse\n')
   clinEnt <- loadEntity('syn1710251')
   osloVecEnt <- loadEntity('syn1725898')
   survEnt <- loadEntity('syn1710257')
@@ -23,13 +24,14 @@ cciBoxPlotDataPrep <- function(){
   survObj <- survEnt$objects$oslovalSurvData
   rownames(survObj) <- rownames(xIntClinDat)
   
+  cat('Breaking out the clinical subcategories\n')
   ## CATEGORIZE SURVIVAL DATA
   yTime <- survEnt$objects$oslovalSurvData[ , 1]/356
   timeCat <- rep(NA, length(yTime))
   timeCat[which(yTime <= 5)] <- 1
   timeCat[which(yTime > 5 & yTime <= 10)] <- 2
   timeCat[which(yTime > 10)] <- 3
-
+  
   ## IDENTIFY CLINICAL SUBCATEGORIES
   osloPredMat <- osloVecEnt$objects$osloPredictions
   clinLogicalMat <- as.data.frame(matrix(0, nrow = nrow(osloPredMat), ncol = 20))
@@ -124,6 +126,7 @@ cciBoxPlotDataPrep <- function(){
   
   ## NOW THAT A LOGICAL MATRIX HAS BEEN GENERATED, CREATE SUBMATRICES OF 
   ## MODEL PREDICTIONS FOR EACH PATIENT BELONGING TO A SUBGROUP
+  cat('Scoring model performance within each clinical subcategory\n')
   groupPredMatList <- apply(clinLogicalMat, 2, function(x){osloPredMat[x == 1, ]})
   names(groupPredMatList) <- colnames(clinLogicalMat)
   
@@ -137,20 +140,9 @@ cciBoxPlotDataPrep <- function(){
     })
   })
   
-  ## RETURN OBJECTS
-  returnObj <- list('clinicalGroupLogicalMatrix' = clinLogicalMat,
-                    'clinicalGroupCciList' = groupCciList)
-  return(returnObj)
-}
-
-### SECOND FUNCTION
-cciBoxPlots <- function(returnObj){
-  ## REQUIRE
-  require(ggplot2)
-  require(reshape)
   
   ## MELT THE DATAFRAME
-  cciDF <- as.data.frame(returnObj$clinicalGroupCciList)
+  cciDF <- as.data.frame(groupCciList)
   mCciDF <- melt(cciDF)
   colnames(mCciDF) <- c('clinical', 'cci')
   
@@ -162,11 +154,13 @@ cciBoxPlots <- function(returnObj){
       theme(legend.position = 'none')
   }
   
+  cat('Plotting model performance within clinical subcategories\n')
   ## FIRST BOXPLOT: BY GRADE
   gradeDF <- mCciDF[grep('grade', mCciDF$clinical), ]
   gradeBoxPlot <- makeBoxPlot(gradeDF) +
     ggtitle('Model Performance & Histological Grade\n') +
     xlab('\nGrade') + ylab('Concordance Index\n')
+  show(gradeBoxPlot)
   
   ## SECOND BOXPLOT: BY LYMPH NODE CATEGORY
   lymphNodeDF <- mCciDF[grep('ln', mCciDF$clinical), ]
@@ -175,6 +169,7 @@ cciBoxPlots <- function(returnObj){
     scale_x_discrete(name = '\nLymph Node Status',
                      breaks = colnames(cciDF)[4:7],
                      labels = c('LN Neg', 'LN 1-3', 'LN 4-9', 'LN 10+'))
+  show(lymphNodeBoxPlot)
   
   ## THIRD BOXPLOT: BY FOLLOWUP TIME
   timeDF <- mCciDF[grep('time', mCciDF$clinical), ]
@@ -183,6 +178,7 @@ cciBoxPlots <- function(returnObj){
     scale_x_discrete(name = '\nFollowup Time',
                      breaks = colnames(cciDF)[8:10],
                      labels = c('0-5 Years', '5-10 Years', '10+ Years'))
+  show(timeBoxPlot)
   
   ## FOURTH BOXPLOT: OTHER VARIABLES
   ageDF <- mCciDF[grep('Meno', mCciDF$clinical), ]
@@ -192,10 +188,14 @@ cciBoxPlots <- function(returnObj){
   clinBoxPlot <- makeBoxPlot(clinDF) +
     ggtitle('Model Performance & Clinical Characteristics') +
     scale_x_discrete(name = '\nClinical Characteristics',
-                     breaks = colnames(cciDF)[11:16],
+                     breaks = colnames(cciDF)[c(11:12, 15:16, 19:20)],
                      labels = c('≤50Yr', '>50Yr', 'ER+', 'ER-', 'HER2+', 'HER2-'))
+  show(clinBoxPlot)
   
-  returnObj <- list('cciDF' = mCciDF,
+  cat('Returning data objects and figure objects to the workspace\n')
+  returnObj <- list('clinicalGroupLogicalMatrix' = clinLogicalMat,
+                    'clinicalGroupCciList' = groupCciList,
+                    'cciDF' = mCciDF,
                     'gradeBoxPlot' = gradeBoxPlot,
                     'lymphNodeBoxPlot' = lymphNodeBoxPlot,
                     'timeBoxPlot' = timeBoxPlot,
@@ -203,12 +203,3 @@ cciBoxPlots <- function(returnObj){
   
   return(returnObj)
 }
-
-
-
-
-
-
-
-
-
