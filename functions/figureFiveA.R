@@ -1,11 +1,11 @@
-## osloAnova.R
+## figureFiveA.R
 
 ## Adapted from Erhan Bilal's code
 ## Erich S. Huang
 ## Sage Bionetworks
 ## erich.huang@sagebase.org
 
-osloAnovaAnalysis <- function(){
+figureFiveA <- function(){
   ## REQUIRE
   require(synapseClient)
   require(survcomp)
@@ -126,3 +126,11 @@ osloAnovaAnalysis <- function(){
     ggtitle('ANOVA Analysis of Clinical Characteristics\n') +
     xlab('\nClinical Characteristic') + ylab('Percent Variance Explained\n')
   
+  show(anovaBarPlot)
+  
+  returnList<- list('anovaDF' = anovaDF,
+             'anovaBarPlot' = anovaBarPlot)
+  
+  return(returnList)
+  
+}
