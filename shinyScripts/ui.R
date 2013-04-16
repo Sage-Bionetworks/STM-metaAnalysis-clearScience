@@ -55,7 +55,7 @@ shinyUI(pageWithSidebar(
   # number of observations
   mainPanel(
     h4('Leaderboard Top 10 By Covariate Selected'),
-    tableOutput("tableView")
+    tableOutput("tableView"),
     
     h4('Clinical Subgroup Model Performance Boxplot'),
     plotOutput("graphics1", width = '75%', height = '500px'),
