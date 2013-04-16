@@ -48,6 +48,13 @@ shinyUI(pageWithSidebar(
              "within that subgroup versus All Patients",
              "in real time."),
     
+    br(),
+    
+    helpText("This allows one to evaluate how models",
+             "generated for prediction across all",
+             "breast cancer perform in defined subgroups",
+             "of the disease.")
+    
     submitButton("Update View")
   ),
   
