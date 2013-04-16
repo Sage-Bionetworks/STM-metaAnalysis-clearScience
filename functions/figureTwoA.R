@@ -32,8 +32,8 @@ figureTwoA <- function(dateVec = NULL){
     })
   } else {
     names(dateVec) <- modelIDs
-    dateFrame <- data.frame(t(data.frame(t(sapply(dateVec, c)))))
   }
+  dateFrame <- data.frame(t(data.frame(t(sapply(dateVec, c)))))
   dateScoreFrame <- data.frame('score' = preOctLeaderboard$ConcordanceIndex, 'modelDate' = dateFrame)
   rownames(dateScoreFrame) <- modelIDs
   colnames(dateScoreFrame) <- c('score', 'modelDate')
