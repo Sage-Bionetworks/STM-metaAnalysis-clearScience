@@ -53,7 +53,7 @@ shinyUI(pageWithSidebar(
     helpText("This allows one to evaluate how models",
              "generated for prediction across all",
              "breast cancer perform in defined subgroups",
-             "of the disease.")
+             "of the disease."),
     
     submitButton("Update View")
   ),
