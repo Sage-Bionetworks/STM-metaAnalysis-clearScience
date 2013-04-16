@@ -62,7 +62,7 @@ shinyUI(pageWithSidebar(
              "scorable models in the Final OsloVal",
              "stage of the Challenge and a density",
              "plot."),
-    
+
     submitButton("Update View")
   ),
   
