@@ -58,10 +58,10 @@ shinyUI(pageWithSidebar(
   # number of observations
   mainPanel(
     h4('Clinical Subgroup Model Performance Boxplot'),
-    plotOutput("graphics1", width = '85%', height = '500px'),
+    plotOutput("graphics1", width = '50%', height = '500px'),
     
     h4('Clinical Subgroup Model Performance Density Plot'),
-    plotOutput("graphics2", width = '85%', height = '500px')
+    plotOutput("graphics2", width = '50%', height = '500px')
     
 #     helpText('Each point represents a model and its performance',
 #              'within the user-selected clinical subgroup of patients.',
