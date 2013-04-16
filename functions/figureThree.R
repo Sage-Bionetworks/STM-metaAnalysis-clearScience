@@ -97,7 +97,9 @@ figureThree <- function(pseudoRndSeed = NULL){
   returnList <- list('ciSampleBoxPlot' = ciSampleBoxPlot,
                      'rankSampleBoxPlot' = rankSampleBoxPlot,
                      'ciSampleDensityPlot' = ciSampleDensityPlot,
-                     'rankSampleDensityPlot' = rankSampleDensityPlot)
+                     'rankSampleDensityPlot' = rankSampleDensityPlot,
+                     'samplePerformanceMatrix' = samplePerfMatrix,
+                     'sampleRankMatrix' = sampleRankMatrix)
   
   return(returnList)
   
