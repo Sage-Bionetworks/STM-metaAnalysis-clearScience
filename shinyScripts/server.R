@@ -84,7 +84,9 @@ shinyServer(function(input, output) {
     lbBoxplot <- ggplot(boxplotDF, aes(x = factor(category), y = scores)) + 
       geom_boxplot() + 
       geom_jitter(aes(colour = factor(category)), size = 7, alpha = 0.7) +
-      ggtitle(paste('All Patients versus ', toupper(input$clinCovar), '\n', sep = '')) +
+      ggtitle(paste('All Patients (Red) versus ', 
+                    toupper(input$clinCovar),
+                    ' (Blue)\n', sep = '')) +
       ylab('Concordance Index\n') + xlab('\nCategory') +
       theme(legend.position = 'none')
     show(lbBoxplot)
@@ -100,7 +102,9 @@ shinyServer(function(input, output) {
     
     lbDenseplot <- ggplot(boxplotDF, aes(scores, fill = factor(category))) + 
       geom_density(alpha = 0.3) +
-      ggtitle(paste('All Patients versus ', toupper(input$clinCovar), '\n', sep = '')) +
+      ggtitle(paste('All Patients (Red) versus ', 
+                    toupper(input$clinCovar), 
+                    ' (Blue)\n', sep = '')) +
       ylab('Concordance Index\n') + xlab('\nCategory') +
       theme(legend.position = 'none')
     show(lbDenseplot)

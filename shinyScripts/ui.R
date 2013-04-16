@@ -40,6 +40,7 @@ shinyUI(pageWithSidebar(
                             'Tumor Size 0-2 CM',
                             'Tumor Size 2+ CM'
                             )),
+    
     helpText("Select a Clinical Covariate",
              "then click 'Update View'",
              "this will re-sort the leaderboard by",
@@ -54,6 +55,13 @@ shinyUI(pageWithSidebar(
              "generated for prediction across all",
              "breast cancer perform in defined subgroups",
              "of the disease."),
+    
+    br(),
+    
+    helpText("Here we display a boxplot of all",
+             "scorable models in the Final OsloVal",
+             "stage of the Challenge and a density",
+             "plot."),
     
     submitButton("Update View")
   ),
