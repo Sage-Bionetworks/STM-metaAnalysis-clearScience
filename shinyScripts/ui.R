@@ -12,7 +12,7 @@ require(shiny)
 shinyUI(pageWithSidebar(
   
   # Application title
-  headerPanel("Challenge Leaderboard App"),
+  headerPanel("Model Performance by Clinical Covariate"),
   
   # Sidebar with controls to select a dataset and specify the number
   # of observations to view
@@ -58,10 +58,10 @@ shinyUI(pageWithSidebar(
     tableOutput("tableView"),
     
     h4('Clinical Subgroup Model Performance Boxplot'),
-    plotOutput("graphics1", width = '75%', height = '500px'),
+    plotOutput("graphics1", width = '85%', height = '500px'),
     
     h4('Clinical Subgroup Model Performance Density Plot'),
-    plotOutput("graphics2", width = '75%', height = '500px')
+    plotOutput("graphics2", width = '85%', height = '500px')
     
 #     helpText('Each point represents a model and its performance',
 #              'within the user-selected clinical subgroup of patients.',
