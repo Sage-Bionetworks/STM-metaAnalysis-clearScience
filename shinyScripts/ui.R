@@ -48,20 +48,20 @@ shinyUI(pageWithSidebar(
              "within that subgroup versus All Patients",
              "in real time."),
     
-    submitButton("Update View"),
-    
-    h4('Leaderboard Top 10 By Covariate Selected'),
-    tableOutput("tableView")
+    submitButton("Update View")
   ),
   
   # Show a summary of the dataset and an HTML table with the requested
   # number of observations
   mainPanel(
+    h4('Leaderboard Top 10 By Covariate Selected'),
+    tableOutput("tableView")
+    
     h4('Clinical Subgroup Model Performance Boxplot'),
-    plotOutput("graphics1", width = '50%', height = '500px'),
+    plotOutput("graphics1", width = '75%', height = '500px'),
     
     h4('Clinical Subgroup Model Performance Density Plot'),
-    plotOutput("graphics2", width = '50%', height = '500px')
+    plotOutput("graphics2", width = '75%', height = '500px')
     
 #     helpText('Each point represents a model and its performance',
 #              'within the user-selected clinical subgroup of patients.',
