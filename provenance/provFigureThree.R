@@ -1,5 +1,9 @@
 ## provFigureThree.R
 
+## Erich S. Huang
+## Sage Bionetworks
+## erich.huang@sagebase.org
+
 ## REQUIRE 
 require(synapseClient)
 require(rGithubClient)
