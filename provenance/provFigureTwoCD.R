@@ -42,5 +42,5 @@ figAct <- Activity(name = "Create Scatterplots of Challenge Phases",
                    ))
 figAct <- createEntity(figAct)
 
-outputList <- list(figPngEnt, figObjEnt)
+outputList <- list(figDPngEnt, figDObjEnt, figCPngEnt, figCObjEnt)
 foo <- generatedByList(outputList, figAct)
