@@ -11,12 +11,12 @@ clinicalTable <- function(x){
   
   ## LOAD METABRIC DATA
   mbricEnt <- loadEntity('syn1710260')
-  metaClin <- mbricEnt$objects$Complete_METABRIC_Clinical_Features_Data
+  metaClin <- mbricEnt$objects$metabricClinicalTable
   
   ## LOAD OSLOVAL DATA
-  osloClinEnt <- loadEntity('syn1449480')
-  osloSurvEnt <- loadEntity('syn1449477')
-  osloClin <- osloClinEnt$objects$xIntClinDat
+  osloClinEnt <- loadEntity('syn1710251')
+  osloSurvEnt <- loadEntity('syn1710257')
+  osloClin <- osloClinEnt$objects$oslovalClinicalTable
   
   ## CONSTRUCT DATA FRAME
   clinTable <- data.frame('METABRIC' = rep(NA, 28), 
