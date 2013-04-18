@@ -4,7 +4,7 @@
 ## Sage Bionetworks
 ## erich.huang@sagebase.org
 
-## Adapted from Erhan Biilal's Figure 4B work on
+## Adapted from Erhan Bilal's Figure 4B work on
 ## analyzing the results of the BCC challenge.
 
 figureFourB <- function(){
