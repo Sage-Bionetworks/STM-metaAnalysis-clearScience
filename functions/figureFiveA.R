@@ -5,7 +5,7 @@
 ## Sage Bionetworks
 ## erich.huang@sagebase.org
 
-figureFiveA <- function(){
+figureFiveA <- function(... = NULL){
   ## REQUIRE
   require(synapseClient)
   require(survcomp)

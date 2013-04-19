@@ -7,7 +7,7 @@
 ## Adapted from Erhan Bilal's Figure 4C work on
 ## analyzing the results of the BCC challenge.
 
-figureFourD <- function(){
+figureFourD <- function(... = NULL){
   
   ## REQUIRE
   require(synapseClient)

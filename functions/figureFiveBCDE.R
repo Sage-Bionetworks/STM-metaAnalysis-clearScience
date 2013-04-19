@@ -6,7 +6,7 @@
 
 
 ### FIRST FUNCTION
-figureFiveBCDE <- function(){
+figureFiveBCDE <- function(... = NULL){
   ## REQUIRE
   require(synapseClient)
   require(ggplot2)

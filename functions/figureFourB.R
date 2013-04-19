@@ -7,7 +7,7 @@
 ## Adapted from Erhan Bilal's Figure 4B work on
 ## analyzing the results of the BCC challenge.
 
-figureFourB <- function(){
+figureFourB <- function(... = NULL){
   ## REQUIRE
   require(synapseClient)
   require(ggplot2)

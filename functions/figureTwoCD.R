@@ -4,7 +4,7 @@
 ## Sage Bionetworks
 ## erich.huang@sagebase.org
 
-figureTwoCD <- function(){
+figureTwoCD <- function(... = NULL){
   
   ## REQUIRE
   require(synapseClient)
