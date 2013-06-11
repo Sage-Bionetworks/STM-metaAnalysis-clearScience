@@ -160,7 +160,7 @@ figureFiveBCDE <- function(... = NULL){
   gradeBoxPlot <- makeBoxPlot(gradeDF) +
     ggtitle('Model Performance & Histological Grade\n') +
     xlab('\nGrade') + ylab('Concordance Index\n')
-  show(gradeBoxPlot)
+  suppressMessages(show(gradeBoxPlot))
   
   ## SECOND BOXPLOT: BY LYMPH NODE CATEGORY
   lymphNodeDF <- mCciDF[grep('ln', mCciDF$clinical), ]
@@ -169,7 +169,7 @@ figureFiveBCDE <- function(... = NULL){
     scale_x_discrete(name = '\nLymph Node Status',
                      breaks = colnames(cciDF)[4:7],
                      labels = c('LN Neg', 'LN 1-3', 'LN 4-9', 'LN 10+'))
-  show(lymphNodeBoxPlot)
+  suppressMessages(show(lymphNodeBoxPlot))
   
   ## THIRD BOXPLOT: BY FOLLOWUP TIME
   timeDF <- mCciDF[grep('time', mCciDF$clinical), ]
@@ -178,7 +178,7 @@ figureFiveBCDE <- function(... = NULL){
     scale_x_discrete(name = '\nFollowup Time',
                      breaks = colnames(cciDF)[8:10],
                      labels = c('0-5 Years', '5-10 Years', '10+ Years'))
-  show(timeBoxPlot)
+  suppressMessages(show(timeBoxPlot))
   
   ## FOURTH BOXPLOT: OTHER VARIABLES
   ageDF <- mCciDF[grep('Meno', mCciDF$clinical), ]
@@ -189,8 +189,8 @@ figureFiveBCDE <- function(... = NULL){
     ggtitle('Model Performance & Clinical Characteristics') +
     scale_x_discrete(name = '\nClinical Characteristics',
                      breaks = colnames(cciDF)[c(11:12, 15:16, 19:20)],
-                     labels = c('≤50Yr', '>50Yr', 'ER+', 'ER-', 'HER2+', 'HER2-'))
-  show(clinBoxPlot)
+                     labels = c('<=50Yr', '>50Yr', 'ER+', 'ER-', 'HER2+', 'HER2-'))
+  suppressMessages(show(clinBoxPlot))
   
   cat('Returning data objects and figure objects to the workspace\n')
   returnObj <- list('clinicalGroupLogicalMatrix' = clinLogicalMat,
