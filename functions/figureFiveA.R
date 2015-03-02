@@ -125,7 +125,7 @@ figureFiveA <- function(... = NULL){
   mAnovaDF <- melt(anovaDF)
   colnames(mAnovaDF) <- c('Clinical', 'percentVariance')
   
-  anovaBarPlot <- ggplot(mAnovaDF, aes(Clinical, percentVariance)) + geom_bar(aes(fill = Clinical)) +
+  anovaBarPlot <- ggplot(mAnovaDF, aes(Clinical, percentVariance)) + geom_bar(aes(fill = Clinical), stat = 'identity') +
     ggtitle('ANOVA Analysis of Clinical Characteristics\n') +
     xlab('\nClinical Characteristic') + ylab('Percent Variance Explained\n')
   
