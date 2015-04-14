@@ -17,11 +17,11 @@ figureThree <- function(pseudoRndSeed = NULL){
   
   ## LOAD NECESSARY OBJECTS
   cat('Loading necessary Synapse entities\n')
-  osloEnt <- loadEntity('syn1725898') # matrix of predictions 
-  osloScores <- osloEnt$objects$osloPredictions
+  osloEnt <- synGet('syn1725898', load=TRUE) # matrix of predictions 
+  osloScores <- osloEnt@objects$osloPredictions
   
-  osloSurvEnt <- loadEntity('syn1710257') # survival object
-  osloSurv <- osloSurvEnt$objects$oslovalSurvData
+  osloSurvEnt <- synGet('syn1710257', load=TRUE) # survival object
+  osloSurv <- osloSurvEnt@objects$oslovalSurvData
   rownames(osloSurv) <- rownames(osloScores)
   
   orderedIDs <- colnames(osloScores)

@@ -16,19 +16,19 @@ figureFourB <- function(... = NULL){
   require(survcomp)
   
   ## LOAD NECESSARY DATA OBJECTS
-  osloEnt <- loadEntity('syn1725898') # matrix of predictions 
+  osloEnt <- synGet('syn1725898', load=TRUE) # matrix of predictions 
   
-  osloSurvEnt <- loadEntity('syn1710257') # survival object
+  osloSurvEnt <- synGet('syn1710257', load=TRUE) # survival object
   
-  osloLbEnt <- loadEntity('syn1739275') # Final osloval leadeboard
+  osloLbEnt <- synGet('syn1739275', load=TRUE) # Final osloval leadeboard
   
-  osloPredMat <- osloEnt$objects$osloPredictions
+  osloPredMat <- osloEnt@objects$osloPredictions
   osloPredMat <- data.frame('patientID' = 1:184, osloPredMat)
   osloPredMat <- apply(osloPredMat, 2, rank)
   
-  osloSurv <- osloSurvEnt$objects$oslovalSurvData
+  osloSurv <- osloSurvEnt@objects$oslovalSurvData
   
-  osloLb <- osloLbEnt$objects$object
+  osloLb <- osloLbEnt@objects$object
   osloLb <- osloLb[1:83, ]
   
   ## GENERATE OSLOVAL 'META-' OR COMMUNITY SCORES

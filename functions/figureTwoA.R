@@ -16,8 +16,8 @@ figureTwoA <- function(dateVec = NULL){
   
   ## LOAD NECESSARY OBJECTS
   cat('Loading necessary objects from Synapse\n')
-  metbLbEnt <- loadEntity('syn1745570') # Pre-15 October leaderboard
-  preOctLeaderboard <- metbLbEnt$objects$object
+  metbLbEnt <- synGet('syn1745570', load=TRUE) # Pre-15 October leaderboard
+  preOctLeaderboard <- metbLbEnt@objects$object
   
   modelIDs <- preOctLeaderboard$SynapseID
   

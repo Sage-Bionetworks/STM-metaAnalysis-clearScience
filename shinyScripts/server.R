@@ -11,15 +11,15 @@ library(ggplot2)
 library(plyr)
 
 ## DATA LOAD FROM SYNAPSE
-oslovalLbEnt <- loadEntity('syn1739275')
-cciEnt <- loadEntity('syn1738278')
+oslovalLbEnt <- synGet('syn1739275', load=TRUE)
+cciEnt <- synGet('syn1738278', load=TRUE)
 
-oslovalLB <- oslovalLbEnt$objects$object
+oslovalLB <- oslovalLbEnt@objects$object
 
 oslovalLB$MODEL <- strtrim(oslovalLB$MODEL, 30)
 
 rownames(oslovalLB) <- oslovalLB$SYNID
-cciGroupList <- cciEnt$objects$object
+cciGroupList <- cciEnt@objects$object
 
 # pre-sort (descending) the cciGroup vectors
 sGroupList <- lapply(cciGroupList, sort, decreasing = TRUE)

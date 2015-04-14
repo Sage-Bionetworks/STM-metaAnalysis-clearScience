@@ -13,13 +13,13 @@ figureTwoB <- function(... = NULL){
   require(survcomp)
   
   ## READ IN THE LEADERBOARD DATA
-  fifteenOctLBEnt <- loadEntity('syn1744693')
-  pre15OctLBEnt <- loadEntity('syn1745570')
-  finalLBEnt <- loadEntity('syn1739275')
+  fifteenOctLBEnt <- synGet('syn1744693', load=TRUE)
+  pre15OctLBEnt <- synGet('syn1745570', load=TRUE)
+  finalLBEnt <- synGet('syn1739275', load=TRUE)
   
-  oct15LB <- fifteenOctLBEnt$objects$object
-  preOct15LB <- pre15OctLBEnt$objects$object
-  finalLB <- finalLBEnt$objects$object
+  oct15LB <- fifteenOctLBEnt@objects$object
+  preOct15LB <- pre15OctLBEnt@objects$object
+  finalLB <- finalLBEnt@objects$object
   
   # Take advantage of R's rownames functionality
   rownames(finalLB) <- finalLB$SYNID
@@ -44,8 +44,8 @@ figureTwoB <- function(... = NULL){
   
   ## CREATE PERMUTED CONCORDANCE INDEX DATA FOR A NULL DISTRIBUTION
   ## Load in the true osloval survival data
-  testSurvEnt <- loadEntity('syn1710257')
-  testSurvObj <- testSurvEnt$objects$oslovalSurvData
+  testSurvEnt <- synGet('syn1710257', load=TRUE)
+  testSurvObj <- testSurvEnt@objects$oslovalSurvData
   
   mockData <- matrix(NA, nrow = 184, ncol = length(fullIntersect))
   

@@ -17,17 +17,17 @@ figureFourD <- function(... = NULL){
   require(survcomp)
   
   ## LOAD NECESSARY OBJECTS
-  osloEnt <- loadEntity('syn1725898') # matrix of predictions 
-  osloSurvEnt <- loadEntity('syn1710257') # survival object
-  osloLbEnt <- loadEntity('syn1739275') # Final osloval leadeboard
+  osloEnt <- synGet('syn1725898', load=TRUE) # matrix of predictions 
+  osloSurvEnt <- synGet('syn1710257', load=TRUE) # survival object
+  osloLbEnt <- synGet('syn1739275', load=TRUE) # Final osloval leadeboard
   
-  osloScores <- osloEnt$objects$osloPredictions
+  osloScores <- osloEnt@objects$osloPredictions
   osloScores <- data.frame('patientID' = 1:184, osloScores)
   osloScores <- apply(osloScores, 2, rank)
   
-  osloSurv <- osloSurvEnt$objects$oslovalSurvData
+  osloSurv <- osloSurvEnt@objects$oslovalSurvData
   
-  osloLeaderboard <- osloLbEnt$objects$object
+  osloLeaderboard <- osloLbEnt@objects$object
   osloLeaderboard <- osloLeaderboard[1:83, ]
   
   # Plots boxplots for metapredictions of 1,5,10,20,50 random participants

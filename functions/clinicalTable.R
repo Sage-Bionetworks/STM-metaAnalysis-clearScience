@@ -10,13 +10,13 @@ clinicalTable <- function(x){
   #require()
   
   ## LOAD METABRIC DATA
-  mbricEnt <- loadEntity('syn1710260')
-  metaClin <- mbricEnt$objects$metabricClinicalTable
+  mbricEnt <- synGet('syn1710260', load=TRUE)
+  metaClin <- mbricEnt@objects$metabricClinicalTable
   
   ## LOAD OSLOVAL DATA
-  osloClinEnt <- loadEntity('syn1710251')
-  osloSurvEnt <- loadEntity('syn1710257')
-  osloClin <- osloClinEnt$objects$oslovalClinicalTable
+  osloClinEnt <- synGet('syn1710251', load=TRUE)
+  osloSurvEnt <- synGet('syn1710257', load=TRUE)
+  osloClin <- osloClinEnt@objects$oslovalClinicalTable
   
   ## CONSTRUCT DATA FRAME
   clinTable <- data.frame('METABRIC' = rep(NA, 28), 

@@ -16,24 +16,24 @@ figureFiveBCDE <- function(... = NULL){
   
   ## LOAD DATA OBJECTS
   cat('Loading the necessary data objects from Synapse\n')
-  clinEnt <- loadEntity('syn1710251')
-  osloVecEnt <- loadEntity('syn1725898')
-  survEnt <- loadEntity('syn1710257')
+  clinEnt <- synGet('syn1710251', load=TRUE)
+  osloVecEnt <- synGet('syn1725898', load=TRUE)
+  survEnt <- synGet('syn1710257', load=TRUE)
   
-  xIntClinDat <- clinEnt$objects$oslovalClinicalTable
-  survObj <- survEnt$objects$oslovalSurvData
+  xIntClinDat <- clinEnt@objects$oslovalClinicalTable
+  survObj <- survEnt@objects$oslovalSurvData
   rownames(survObj) <- rownames(xIntClinDat)
   
   cat('Breaking out the clinical subcategories\n')
   ## CATEGORIZE SURVIVAL DATA
-  yTime <- survEnt$objects$oslovalSurvData[ , 1]/356
+  yTime <- survEnt@objects$oslovalSurvData[ , 1]/356
   timeCat <- rep(NA, length(yTime))
   timeCat[which(yTime <= 5)] <- 1
   timeCat[which(yTime > 5 & yTime <= 10)] <- 2
   timeCat[which(yTime > 10)] <- 3
   
   ## IDENTIFY CLINICAL SUBCATEGORIES
-  osloPredMat <- osloVecEnt$objects$osloPredictions
+  osloPredMat <- osloVecEnt@objects$osloPredictions
   clinLogicalMat <- as.data.frame(matrix(0, nrow = nrow(osloPredMat), ncol = 20))
   rownames(clinLogicalMat) <- rownames(osloPredMat)
   colnames(clinLogicalMat) <- c('grade1', 

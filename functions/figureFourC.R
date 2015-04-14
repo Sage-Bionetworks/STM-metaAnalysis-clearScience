@@ -17,13 +17,13 @@ figureFourC <- function(... = NULL){
   require(survcomp)
   
   ## LOAD NECESSARY OBJECTS
-  metbLbEnt <- loadEntity('syn1744693') # 15 October leaderboard
-  metbEnt <- loadEntity('syn1738796') # matrix of predictions
-  metbSurvEnt <- loadEntity('syn1125632') # survival object 
+  metbLbEnt <- synGet('syn1744693', load=TRUE) # 15 October leaderboard
+  metbEnt <- synGet('syn1738796', load=TRUE) # matrix of predictions
+  metbSurvEnt <- synGet('syn1125632', load=TRUE) # survival object 
   
-  metbLeaderboard <- metbLbEnt$objects$object
-  metbScores <- metbEnt$objects$object
-  metbSurv <- metbSurvEnt$objects$clinicalSurvData
+  metbLeaderboard <- metbLbEnt@objects$object
+  metbScores <- metbEnt@objects$object
+  metbSurv <- metbSurvEnt@objects$clinicalSurvData
   
   # Plots boxplots for metapredictions of 1,5,10,20,50 random participants
   mMeta1Score <- metbLeaderboard[ ,'Final.Test.Score']
